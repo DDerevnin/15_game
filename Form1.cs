@@ -22,7 +22,7 @@ namespace _15_game
         private void game_start ()
         {
             game.start();
-            for (int j = 0; j < 100; j++)
+            for (int j = 0; j < 101; j++)
                 game.shift_random();
             refresh();
             game.set_time(DateTime.Now);
