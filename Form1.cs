@@ -12,20 +12,39 @@ namespace _15_game
 {
     public partial class Form1 : Form
     {
+        Game game;
         public Form1()
         {
             InitializeComponent();
+            game = new Game();
+        }
+
+        private void game_start ()
+        {
+            game.start();
+            for (int j = 0; j < 100; j++)
+                game.shift_random();
+            refresh();
+            game.set_time(DateTime.Now);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            game.start();
+            refresh();
         }
 
         private void button15_Click(object sender, EventArgs e)
         {
             int position = Convert.ToInt32(((Button)sender).Tag);
-            MessageBox.Show(position.ToString());
+            game.shift(position);
+            refresh();
+            if (game.check_numbers())
+            {
+                TimeSpan elapsed = DateTime.Now - game.get_time();
+                MessageBox.Show("Вы победили!" + "\n" + "Время: " + elapsed.Minutes.ToString("00") + ":" + elapsed.Seconds.ToString("00"), "Поздравляем");
+                game_start();
+            }
         }
 
         private Button button (int position)
@@ -50,6 +69,26 @@ namespace _15_game
                 case 15: return button15;
                 default: return null;
             }
+        }
+
+        private void new_game_Click(object sender, EventArgs e)
+        {
+            game_start();
+        }
+
+        private void refresh ()
+        {
+            for (int position = 0; position < 16; position++)
+            {
+                int number = game.get_number(position);
+                button(position).Text = number.ToString();
+                button(position).Visible = (number > 0);
+            }
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
